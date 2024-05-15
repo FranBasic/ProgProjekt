@@ -77,6 +77,9 @@ int main() {
         case SORTIRAJ_LIKOVE:
             sortirajLikove();
             break;
+        case NAPRAVI_NOVOG_LIKA:
+            napraviNovogLika(&igrac);
+            break;
         case IZLAZ:
             printf("Izlaz!\n");
             break;
@@ -85,6 +88,7 @@ int main() {
             break;
         }
     } while (izbor != IZLAZ);
+
 
     return 0;
 }

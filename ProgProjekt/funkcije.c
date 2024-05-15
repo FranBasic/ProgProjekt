@@ -18,7 +18,21 @@ void ispisiIzbornik() {
     printf("6. Izbrisi lika\n");
     printf("7. Prikazi sve likove\n");
     printf("8. Sortiraj likove\n");
-    printf("9. Izlaz iz igre\n");
+    printf("9. Kreiraj Novog lika\n");
+    printf("10. Izlaz iz igre\n");
+}
+
+void createNewCharacter(Lik* lik) {
+
+    //lik = [ "Bezimeni", 1, 100, 10, 0 ];
+
+    printf("Unesite ime svog lika: ");
+    scanf("%24[^\n]", lik->ime);
+    getchar();
+    //lik->level = 1;
+    //lik->zdravlje = 100;
+    //lik->snaga = 10;
+    //lik->bodovi = 0;
 }
 
 void zapocniIgru(const Lik* const lik) {
@@ -124,8 +138,8 @@ void treniraj(const Lik* const lik) {
 }
 
 void trenirajZdravlje(Lik* const lik) {
-    lik->zdravlje += 25;
-    printf("\nMalo si odrijemao. Tvoje se zdravlje povecalo za +10\n");
+    lik->zdravlje += 50;
+    printf("\nMalo si odrijemao. Tvoje se zdravlje povecalo za +50\n");
 }
 
 
@@ -189,6 +203,27 @@ void ucitajLika(Lik* lik, int slot) {
     }
 
     fclose(file);
+}
+
+void napraviNovogLika(Lik* lik) {
+    if (lik == NULL) {
+        printf("Greska pri kreiranju lika.\n");
+        return;
+    }
+
+    printf("\n-------------------\n*** Kreiranje novog lika ***\n");
+    printf("Unesite ime: ");
+    getchar();  // To consume any leftover newline character
+    scanf("%24[^\n]", lik->ime);
+
+    // Set default values for the new character
+    lik->level = 1;
+    lik->zdravlje = 100;
+    lik->snaga = 10;
+    lik->bodovi = 0;
+
+    printf("\n%s je uspjesno kreiran!\n", lik->ime);
+
 }
 
 void izbrisiLika(int slot) {

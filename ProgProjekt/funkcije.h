@@ -29,10 +29,12 @@ enum Izbor {
     IZBRISI_LIKA,
     PRIKAZI_SVE_LIKOVE,
     SORTIRAJ_LIKOVE,
+    NAPRAVI_NOVOG_LIKA,
     IZLAZ
 };
 
 void ispisiIzbornik();
+void napraviNovogLika(Lik* lik); //
 void zapocniIgru(const Lik* const lik);
 void prikaziStanje(const Lik* const lik);
 void treniraj(const Lik* const lik);
