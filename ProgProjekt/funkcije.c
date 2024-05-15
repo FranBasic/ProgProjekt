@@ -5,9 +5,6 @@
 #include <string.h>
 #include "funkcije.h"
 
-#define greska printf("Doslo je do greske!\n")
-
-
 void ispisiIzbornik() {
     printf("\n\tODABERI POTEZ:\n");
     printf("1. Borba\n");
@@ -19,20 +16,17 @@ void ispisiIzbornik() {
     printf("7. Prikazi sve likove\n");
     printf("8. Sortiraj likove\n");
     printf("9. Kreiraj Novog lika\n");
-    printf("10. Izlaz iz igre\n");
+    printf("10. Izlaz iz igre\n");              //poredati izbore
 }
 
 void createNewCharacter(Lik* lik) {
-
-    //lik = [ "Bezimeni", 1, 100, 10, 0 ];
-
     printf("Unesite ime svog lika: ");
     scanf("%24[^\n]", lik->ime);
     getchar();
-    //lik->level = 1;
-    //lik->zdravlje = 100;
-    //lik->snaga = 10;
-    //lik->bodovi = 0;
+    lik->level = 1;
+    lik->zdravlje = 100;
+    lik->snaga = 10;
+    lik->bodovi = 0;
 }
 
 void zapocniIgru(const Lik* const lik) {
@@ -71,7 +65,7 @@ void napadniNeprijatelja(Lik* const lik, Neprijatelj* const neprijatelj) {
     printf("\nUlazis u borbenu poziciju...\n");
 
     if (lik == NULL || neprijatelj == NULL) {
-        obradiGresku();
+        printf("Greska kod napadanja.\n");
         return;
     }
 
@@ -213,10 +207,9 @@ void napraviNovogLika(Lik* lik) {
 
     printf("\n-------------------\n*** Kreiranje novog lika ***\n");
     printf("Unesite ime: ");
-    getchar();  // To consume any leftover newline character
+    getchar();
     scanf("%24[^\n]", lik->ime);
 
-    // Set default values for the new character
     lik->level = 1;
     lik->zdravlje = 100;
     lik->snaga = 10;
@@ -268,7 +261,7 @@ void prikaziSveLikove() {
     fclose(file);
 }
 
-int compareByLevel(const void* a, const void* b) {
+int usporediLevele(const void* a, const void* b) {
     Lik* likA = (Lik*)a;
     Lik* likB = (Lik*)b;
     return likB->level - likA->level;
@@ -287,7 +280,7 @@ void sortirajLikove() {
         fread(&likovi[i], sizeof(Lik), 1, file);
     }
 
-    qsort(likovi, 3, sizeof(Lik), compareByLevel);
+    qsort(likovi, 3, sizeof(Lik), usporediLevele);
 
     for (int i = 0; i < 3; ++i) {
         fseek(file, i * sizeof(Lik), SEEK_SET);
@@ -296,8 +289,4 @@ void sortirajLikove() {
 
     fclose(file);
     printf("Likovi su uspjesno sortirani prema levelu.\n");
-}
-
-void obradiGresku() {
-    greska;
 }

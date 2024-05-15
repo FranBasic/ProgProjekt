@@ -31,10 +31,10 @@ enum Izbor {
     SORTIRAJ_LIKOVE,
     NAPRAVI_NOVOG_LIKA,
     IZLAZ
-};
+};                                 //poredati izbore
 
 void ispisiIzbornik();
-void napraviNovogLika(Lik* lik); //
+void napraviNovogLika(Lik* lik);
 void zapocniIgru(const Lik* const lik);
 void prikaziStanje(const Lik* const lik);
 void treniraj(const Lik* const lik);
@@ -46,8 +46,5 @@ void ucitajLika(Lik* lik, int slot);
 void izbrisiLika(int slot);
 void prikaziSveLikove();
 void sortirajLikove();
-void obradiGresku();
 
 #endif
-
-//ucitavanje praznog lik.txt filea radi?
