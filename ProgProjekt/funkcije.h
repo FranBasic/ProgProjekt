@@ -30,6 +30,7 @@ enum Izbor {
     PRIKAZI_SVE_LIKOVE,
     SORTIRAJ_LIKOVE,
     NAPRAVI_NOVOG_LIKA,
+    PRETRAZI_SLOT,
     IZLAZ
 };                                 //poredati izbore
 
@@ -46,5 +47,6 @@ void ucitajLika(Lik* lik, int slot);
 void izbrisiLika(int slot);
 void prikaziSveLikove();
 void sortirajLikove();
+void pretraziSlot(int slot);
 
 #endif

@@ -16,7 +16,8 @@ void ispisiIzbornik() {
     printf("7. Prikazi sve likove\n");
     printf("8. Sortiraj likove\n");
     printf("9. Kreiraj Novog lika\n");
-    printf("10. Izlaz iz igre\n");              //poredati izbore
+    printf("10. Pretrazi slot\n");
+    printf("11. Izlaz iz igre\n");                                       //poredati izbore
 }
 
 void createNewCharacter(Lik* lik) {
@@ -193,7 +194,7 @@ void ucitajLika(Lik* lik, int slot) {
     }
     else {
         *lik = temp;
-        printf("%s je uspjesno ucitan iz spremnika %d.\n", lik->ime, slot + 1);
+        printf("%s je uspjesno ucitan iz slota %d.\n", lik->ime, slot + 1);
     }
 
     fclose(file);
@@ -246,7 +247,7 @@ void prikaziSveLikove() {
         fseek(file, i * sizeof(Lik), SEEK_SET);
         fread(&lik, sizeof(Lik), 1, file);
         if (lik.ime[0] != '\0') {
-            printf("\n*** Spremnik %d ***\n", i + 1);
+            printf("\n*** Slot %d ***\n", i + 1);
             printf("Ime: %s\n", lik.ime);
             printf("Level: %d\n", lik.level);
             printf("Zdravlje: %d\n", lik.zdravlje);
@@ -254,7 +255,7 @@ void prikaziSveLikove() {
             printf("Bodovi: %d\n", lik.bodovi);
         }
         else {
-            printf("\nSpremnik %d je prazan.\n", i + 1);
+            printf("\nSlot %d je prazan.\n", i + 1);
         }
     }
 
@@ -289,4 +290,35 @@ void sortirajLikove() {
 
     fclose(file);
     printf("Likovi su uspjesno sortirani prema levelu.\n");
+}
+
+void pretraziSlot(int slot) {
+    if (slot < 0 || slot >= 3) {
+        printf("Neispravan broj spremnika.\n");
+        return;
+    }
+
+    FILE* file = fopen("likovi.txt", "rb");
+    if (file == NULL) {
+        printf("Greska pri otvaranju datoteke za citanje.\n");
+        return;
+    }
+
+    fseek(file, slot * sizeof(Lik), SEEK_SET);
+
+    Lik lik;
+    size_t trazeniLik = fread(&lik, sizeof(Lik), 1, file);
+    if (trazeniLik != 1 || lik.ime[0] == '\0') {
+        printf("Prazan slot.\n");
+    }
+    else {
+        printf("\n*** Spremnik %d ***\n", slot + 1);
+        printf("Ime: %s\n", lik.ime);
+        printf("Level: %d\n", lik.level);
+        printf("Zdravlje: %d\n", lik.zdravlje);
+        printf("Snaga: %d\n", lik.snaga);
+        printf("Bodovi: %d\n", lik.bodovi);
+    }
+
+    fclose(file);
 }

@@ -32,7 +32,7 @@ int main() {
 
         int slot;
         switch (izbor) {
-        case ZAPOCNI_IGRU:
+        case ZAPOCNI_IGRU:                     //snake case za enum?
             zapocniIgru(&igrac);
             break;
         case PRIKAZI_STANJE:
@@ -79,6 +79,11 @@ int main() {
             break;
         case NAPRAVI_NOVOG_LIKA:
             napraviNovogLika(&igrac);
+            break;
+        case PRETRAZI_SLOT:  // Add this case
+            printf("Unesite broj slota ( 1, 2 ili 3 ): ");
+            scanf("%d", &slot);
+            pretraziSlot(slot - 1);
             break;
         case IZLAZ:
             printf("Izlaz!\n");
