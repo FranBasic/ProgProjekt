@@ -26,6 +26,9 @@ enum Izbor {
     TRENIRAJ,
     SPREMI_HEROJA,
     UCITAJ_LIKA,
+    IZBRISI_LIKA,
+    PRIKAZI_SVE_LIKOVE,
+    SORTIRAJ_LIKOVE,
     IZLAZ
 };
 
@@ -35,9 +38,12 @@ void prikaziStanje(const Lik* const lik);
 void treniraj(const Lik* const lik);
 void trenirajZdravlje(Lik* const lik);
 void trenirajSnagu(Lik* const lik);
-void napadniNeprijatelja(const Lik* const lik, const Neprijatelj* const neprijatelj);
-void spremiHeroja(const Lik* const lik);
-void ucitajLika(Lik* lik);
+void napadniNeprijatelja(const Lik* const lik, Neprijatelj* const neprijatelj);
+void spremiHeroja(const Lik* const lik, int slot);
+void ucitajLika(Lik* lik, int slot);
+void izbrisiLika(int slot);
+void prikaziSveLikove();
+void sortirajLikove();
 void obradiGresku();
 
 #endif

@@ -25,12 +25,13 @@ int main() {
         printf("\n\t\t\t\t\tOdabirem: ");
 
         if (scanf("%d", &izbor) != 1) {
-            printf("Unesite broj!\n");
+            printf("\nUnesite broj!\n");
             while (getchar() != '\n');
             continue;
         }
 
-        switch (izbor) { 
+        int slot;
+        switch (izbor) {
         case ZAPOCNI_IGRU:
             zapocniIgru(&igrac);
             break;
@@ -41,10 +42,40 @@ int main() {
             treniraj(&igrac);
             break;
         case SPREMI_HEROJA:
-            spremiHeroja(&igrac);
+            printf("Unesite broj spremnika (1-3): ");
+            scanf("%d", &slot);
+            if (slot >= 1 && slot <= 3) {
+                spremiHeroja(&igrac, slot - 1);
+            }
+            else {
+                printf("Neispravan broj spremnika.\n");
+            }
             break;
         case UCITAJ_LIKA:
-            ucitajLika(&igrac);
+            printf("Unesite broj spremnika (1-3): ");
+            scanf("%d", &slot);
+            if (slot >= 1 && slot <= 3) {
+                ucitajLika(&igrac, slot - 1);
+            }
+            else {
+                printf("Neispravan broj spremnika.\n");
+            }
+            break;
+        case IZBRISI_LIKA:
+            printf("Unesite broj spremnika (1-3): ");
+            scanf("%d", &slot);
+            if (slot >= 1 && slot <= 3) {
+                izbrisiLika(slot - 1);
+            }
+            else {
+                printf("Neispravan broj spremnika.\n");
+            }
+            break;
+        case PRIKAZI_SVE_LIKOVE:
+            prikaziSveLikove();
+            break;
+        case SORTIRAJ_LIKOVE:
+            sortirajLikove();
             break;
         case IZLAZ:
             printf("Izlaz!\n");
