@@ -153,7 +153,27 @@ void spremiHeroja(const Lik* const lik) {
         return;
     }
 
-    fprintf(file, "%s\n%d\n%d\n%d\n%d\n", lik->ime, lik->level, lik->zdravlje, lik->bodovi, lik->snaga);
+    Lik* podaci = (Lik*)calloc(1, sizeof(Lik));       //
+
+    if (podaci == NULL) {                             //
+        printf("Greška pri alokaciji memorije.\n");
+        fclose(file);
+        return;
+    }
+
+    strcpy(podaci->ime, lik->ime);                    //
+    podaci->level = lik->level;
+    podaci->zdravlje = lik->zdravlje;
+    podaci->snaga = lik->snaga;
+    podaci->bodovi = lik->bodovi;
+
+    fwrite(podaci, sizeof(Lik), 1, file);            //
+
+    //fprintf(file, "%s\n%d\n%d\n%d\n%d\n", lik->ime, lik->level, lik->zdravlje, lik->bodovi, lik->snaga);
+
+    free(podaci);
+
+    podaci = NULL;
 
     fclose(file);
 

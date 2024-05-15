@@ -30,7 +30,7 @@ int main() {
             continue;
         }
 
-        switch (izbor) {
+        switch (izbor) { 
         case ZAPOCNI_IGRU:
             zapocniIgru(&igrac);
             break;
