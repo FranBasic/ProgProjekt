@@ -42,7 +42,7 @@ void treniraj(const Lik* const lik);
 void trenirajZdravlje(Lik* const lik);
 void trenirajSnagu(Lik* const lik);
 void napadniNeprijatelja(const Lik* const lik, Neprijatelj* const neprijatelj);
-void spremiHeroja(const Lik* const lik, int slot);
+void spremiLika(const Lik* const lik, int slot);
 void ucitajLika(Lik* lik, int slot);
 void izbrisiLika(int slot);
 void prikaziSveLikove();

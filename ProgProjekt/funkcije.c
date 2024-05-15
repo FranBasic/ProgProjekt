@@ -150,7 +150,7 @@ void trenirajSnagu(Lik* const lik) {
     }
 }
 
-void spremiHeroja(const Lik* const lik, int slot) {
+void spremiLika(const Lik* const lik, int slot) {
     FILE* file = fopen("likovi.txt", "r+b");
     if (file == NULL) {
         file = fopen("likovi.txt", "w+b");

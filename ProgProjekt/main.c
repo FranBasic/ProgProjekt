@@ -10,7 +10,7 @@
 int main() {
     srand((unsigned)time(NULL));
 
-    Lik igrac = { "Bezimeni", 1, 100, 10, 0 };
+    Lik igrac = { "Lorem", 1, 100, 10, 0 };
 
     static enum Izbor izbor;
 
@@ -42,17 +42,17 @@ int main() {
             treniraj(&igrac);
             break;
         case SPREMI_HEROJA:
-            printf("Unesite broj spremnika (1-3): ");
+            printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
             if (slot >= 1 && slot <= 3) {
-                spremiHeroja(&igrac, slot - 1);
+                spremiLika(&igrac, slot - 1);
             }
             else {
                 printf("Neispravan broj spremnika.\n");
             }
             break;
         case UCITAJ_LIKA:
-            printf("Unesite broj spremnika (1-3): ");
+            printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
             if (slot >= 1 && slot <= 3) {
                 ucitajLika(&igrac, slot - 1);
@@ -62,7 +62,7 @@ int main() {
             }
             break;
         case IZBRISI_LIKA:
-            printf("Unesite broj spremnika (1-3): ");
+            printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
             if (slot >= 1 && slot <= 3) {
                 izbrisiLika(slot - 1);
@@ -80,7 +80,7 @@ int main() {
         case NAPRAVI_NOVOG_LIKA:
             napraviNovogLika(&igrac);
             break;
-        case PRETRAZI_SLOT:  // Add this case
+        case PRETRAZI_SLOT:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
             pretraziSlot(slot - 1);
