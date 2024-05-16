@@ -291,7 +291,7 @@ void sortirajLikove() {
     fclose(file);
     printf("Likovi su uspjesno sortirani prema levelu.\n");
 }
-
+ 
 void pretraziSlot(int slot) {
     if (slot < 0 || slot >= 3) {
         printf("Neispravan broj spremnika.\n");
