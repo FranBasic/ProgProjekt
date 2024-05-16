@@ -24,15 +24,21 @@ enum Izbor {
     ZAPOCNI_IGRU = 1,
     PRIKAZI_STANJE,
     TRENIRAJ,
-    SPREMI_HEROJA,
+    SPREMI_LIKA,
     UCITAJ_LIKA,
     IZBRISI_LIKA,
-    PRIKAZI_SVE_LIKOVE,
-    SORTIRAJ_LIKOVE,
     NAPRAVI_NOVOG_LIKA,
     PRETRAZI_SLOT,
+    PRIKAZI_SVE_LIKOVE,
+    SORTIRAJ_LIKOVE,
     IZLAZ
-};                                 //poredati izbore
+};
+
+enum Izbor2 {
+    ZDRAVLJE = 1,
+    SNAGA,
+    IZLAZ_TRENING
+};
 
 void ispisiIzbornik();
 void napraviNovogLika(Lik* lik);

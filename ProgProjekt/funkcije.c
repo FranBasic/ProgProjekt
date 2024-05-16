@@ -13,17 +13,18 @@ void ispisiIzbornik() {
     printf("4. Spremi lika\n");
     printf("5. Ucitaj lika\n");
     printf("6. Izbrisi lika\n");
-    printf("7. Prikazi sve likove\n");
-    printf("8. Sortiraj likove\n");
-    printf("9. Kreiraj Novog lika\n");
-    printf("10. Pretrazi slot\n");
-    printf("11. Izlaz iz igre\n");                                       //poredati izbore
+    printf("7. Kreiraj lika\n");
+    printf("8. Pretrazi slot\n");
+    printf("9. Prikazi sve slotove\n");
+    printf("10. Sortiraj likove\n");
+    printf("11. Izlaz iz igre\n");
 }
 
 void createNewCharacter(Lik* lik) {
     printf("Unesite ime svog lika: ");
     scanf("%24[^\n]", lik->ime);
     getchar();
+
     lik->level = 1;
     lik->zdravlje = 100;
     lik->snaga = 10;
@@ -112,19 +113,20 @@ void treniraj(const Lik* const lik) {
     printf("1. Zdravlje\n");
     printf("2. Snagu\n");
     printf("3. Nista, mlahonja sam");
+    
+    static enum Izbor2 izbor2;
 
-    int izbor;
     printf("\n\t\t\t\t\tOdabirem: ");
-    scanf("%d", &izbor);
+    scanf("%d", &izbor2);
 
-    switch (izbor) {
-    case 1:
+    switch (izbor2) {
+    case ZDRAVLJE:
         trenirajZdravlje(lik);
         break;
-    case 2:
+    case SNAGA:
         trenirajSnagu(lik);
         break;
-    case 3:
+    case IZLAZ_TRENING:
         break;
     default:
         printf("Mozes odabrati samo 1 za Zdravlje ili 2 za Snagu!\n");
@@ -136,7 +138,6 @@ void trenirajZdravlje(Lik* const lik) {
     lik->zdravlje += 50;
     printf("\nMalo si odrijemao. Tvoje se zdravlje povecalo za +50\n");
 }
-
 
 void trenirajSnagu(Lik* const lik) {
     int maxSnaga = lik->level * 5;
@@ -175,7 +176,7 @@ void spremiLika(const Lik* const lik, int slot) {
     free(temp);
 
     fclose(file);
-    printf("Lik je uspjesno spremljen u spremnik %d.\n", slot + 1);
+    printf("Lik je uspjesno spremljen u slot %d.\n", slot + 1);
 }
 
 void ucitajLika(Lik* lik, int slot) {
@@ -217,7 +218,6 @@ void napraviNovogLika(Lik* lik) {
     lik->bodovi = 0;
 
     printf("\n%s je uspjesno kreiran!\n", lik->ime);
-
 }
 
 void izbrisiLika(int slot) {
@@ -291,10 +291,10 @@ void sortirajLikove() {
     fclose(file);
     printf("Likovi su uspjesno sortirani prema levelu.\n");
 }
- 
+
 void pretraziSlot(int slot) {
     if (slot < 0 || slot >= 3) {
-        printf("Neispravan broj spremnika.\n");
+        printf("Neispravan broj slota.\n");
         return;
     }
 
@@ -312,7 +312,7 @@ void pretraziSlot(int slot) {
         printf("Prazan slot.\n");
     }
     else {
-        printf("\n*** Spremnik %d ***\n", slot + 1);
+        printf("\n*** Slot %d ***\n", slot + 1);
         printf("Ime: %s\n", lik.ime);
         printf("Level: %d\n", lik.level);
         printf("Zdravlje: %d\n", lik.zdravlje);
