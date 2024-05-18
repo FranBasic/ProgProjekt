@@ -217,28 +217,38 @@ void napraviNovogLika(Lik* lik) {
 }
 
 void izbrisiLika(int slot) {
-    char da;
+    char da = 0;
     printf("Zelite li izbrisati slot %d?\nD za da ili N za ne\n", slot + 1);
-    scanf(" %c", &da);
-    while (getchar() != '\n');
 
-    if (da == 'd' || da == 'D') {
-        FILE* file = fopen("likovi.txt", "r+b");
-        if (file == NULL) {
-            printf("Greska pri otvaranju datoteke - brisanje lika.\n");
+    while(1){
+        scanf(" %c", &da);
+
+        while (getchar() != '\n');
+
+        if (da == 'd' || da == 'D') {
+            FILE* file = fopen("likovi.txt", "r+b");
+            if (file == NULL) {
+                printf("Greska pri otvaranju datoteke - brisanje lika.\n");
+                return;
+            }
+
+            Lik prazniLik = { "", 0, 0, 0, 0 };              //vazi li se kao brisanje?
+            fseek(file, slot * sizeof(Lik), SEEK_SET);
+            fwrite(&prazniLik, sizeof(Lik), 1, file);
+
+            fclose(file);
+            printf("Slot %d je izbrisan.\n", slot + 1);
             return;
         }
-
-        Lik prazniLik = { "", 0, 0, 0, 0 };              //vazi li se kao brisanje?
-        fseek(file, slot * sizeof(Lik), SEEK_SET);
-        fwrite(&prazniLik, sizeof(Lik), 1, file);
-
-        fclose(file);
-        printf("Slot %d je izbrisan.\n", slot + 1);
+        else if (da == 'n' || da == 'N') {
+            printf("Brisanje slota je otkazano.\n");
+            return;
+        }
+        else {
+            printf("Neispravan unos.\nD za da ili N za ne\n");
+        }
     }
-    else {
-        printf("Brisanje slota je otkazano.\n");
-    }
+    
 }
 
 void prikaziSveLikove() {
