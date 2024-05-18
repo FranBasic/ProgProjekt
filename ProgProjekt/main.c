@@ -19,6 +19,7 @@ int main() {
     getchar();
 
     do {
+        system("cls");
         ispisiIzbornik();
         printf("\n\t\t\t\t\tOdabirem: ");
 
@@ -30,6 +31,7 @@ int main() {
 
         int slot;
         switch (izbor) {
+            system("cls");
         case ZAPOCNI_IGRU:                     //snake case za enum?
             zapocniIgru(&igrac);
             break;
@@ -87,14 +89,15 @@ int main() {
             printf("Izlaz!\n");
             break;
         default:
-            printf("Taj izbor ne postoji!\n");
+            printf("\nTaj izbor ne postoji!\n");
             break;
         }
+        system("pause");
     } while (izbor != IZLAZ);
-
 
     return 0;
 }
+
 
   //........................: = : .......................
   //......................:*######* : ...................

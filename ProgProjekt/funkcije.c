@@ -11,24 +11,13 @@ void ispisiIzbornik() {
     printf("2. Stanje\n");
     printf("3. Trening\n");
     printf("4. Spremi lika\n");
-    printf("5. Ucitaj lika\n");
-    printf("6. Izbrisi lika\n");
+    printf("5. Ucitaj slot\n");
+    printf("6. Izbrisi slot\n");
     printf("7. Kreiraj lika\n");
     printf("8. Pretrazi slot\n");
     printf("9. Prikazi sve slotove\n");
     printf("10. Sortiraj likove\n");
     printf("11. Izlaz iz igre\n");
-}
-
-void createNewCharacter(Lik* lik) {
-    printf("Unesite ime svog lika: ");
-    scanf("%24[^\n]", lik->ime);
-    getchar();
-
-    lik->level = 1;
-    lik->zdravlje = 100;
-    lik->snaga = 10;
-    lik->bodovi = 0;
 }
 
 void zapocniIgru(const Lik* const lik) {
@@ -113,11 +102,18 @@ void treniraj(const Lik* const lik) {
     printf("1. Zdravlje\n");
     printf("2. Snagu\n");
     printf("3. Nista, mlahonja sam");
-    
+
     static enum Izbor2 izbor2;
 
     printf("\n\t\t\t\t\tOdabirem: ");
-    scanf("%d", &izbor2);
+
+    if (scanf("%d", &izbor2) == 1) {
+        while (getchar() != '\n');
+    }
+    else {
+        printf("Unesi broj!\n");
+        return;
+    }
 
     switch (izbor2) {
     case ZDRAVLJE:
@@ -128,7 +124,7 @@ void treniraj(const Lik* const lik) {
         break;
     case IZLAZ_TRENING:
         break;
-    default:
+    default:                                     //pogresan unos nakon tocnog unosa ponovi radnju tocnog unosa
         printf("Mozes odabrati samo 1 za Zdravlje ili 2 za Snagu!\n");
         break;
     }
@@ -156,7 +152,7 @@ void spremiLika(const Lik* const lik, int slot) {
     if (file == NULL) {
         file = fopen("likovi.txt", "w+b");
         if (file == NULL) {
-            printf("Greska pri otvaranju datoteke za pisanje.\n");
+            printf("Greska pri otvaranju datoteke - spremanje lika.\n");
             return;
         }
     }
@@ -176,7 +172,7 @@ void spremiLika(const Lik* const lik, int slot) {
     free(temp);
 
     fclose(file);
-    printf("Lik je uspjesno spremljen u slot %d.\n", slot + 1);
+    printf("%s je uspjesno spremljen u slot %d.\n",lik->ime, slot + 1);
 }
 
 void ucitajLika(Lik* lik, int slot) {
@@ -221,24 +217,34 @@ void napraviNovogLika(Lik* lik) {
 }
 
 void izbrisiLika(int slot) {
-    FILE* file = fopen("likovi.txt", "r+b");
-    if (file == NULL) {
-        printf("Greska pri otvaranju datoteke za pisanje.\n");
-        return;
+    char da;
+    printf("Zelite li izbrisati slot %d?\nD za da ili N za ne\n", slot + 1);
+    scanf(" %c", &da);
+    while (getchar() != '\n');
+
+    if (da == 'd' || da == 'D') {
+        FILE* file = fopen("likovi.txt", "r+b");
+        if (file == NULL) {
+            printf("Greska pri otvaranju datoteke - brisanje lika.\n");
+            return;
+        }
+
+        Lik prazniLik = { "", 0, 0, 0, 0 };              //vazi li se kao brisanje?
+        fseek(file, slot * sizeof(Lik), SEEK_SET);
+        fwrite(&prazniLik, sizeof(Lik), 1, file);
+
+        fclose(file);
+        printf("Slot %d je izbrisan.\n", slot + 1);
     }
-
-    Lik prazniLik = { "", 0, 0, 0, 0 };
-    fseek(file, slot * sizeof(Lik), SEEK_SET);
-    fwrite(&prazniLik, sizeof(Lik), 1, file);
-
-    fclose(file);
-    printf("Slot %d je izbrisan.\n", slot + 1);
+    else {
+        printf("Brisanje slota je otkazano.\n");
+    }
 }
 
 void prikaziSveLikove() {
     FILE* file = fopen("likovi.txt", "rb");
     if (file == NULL) {
-        printf("Greska pri otvaranju datoteke za citanje.\n");
+        printf("Greska pri otvaranju datoteke - prikazivanje svih slotova.\n");
         return;
     }
 
@@ -271,7 +277,7 @@ int usporediLevele(const void* a, const void* b) {
 void sortirajLikove() {
     FILE* file = fopen("likovi.txt", "rb+");
     if (file == NULL) {
-        printf("Greska pri otvaranju datoteke za citanje.\n");
+        printf("Greska pri otvaranju datoteke - sortiranje.\n");
         return;
     }
 
@@ -300,7 +306,7 @@ void pretraziSlot(int slot) {
 
     FILE* file = fopen("likovi.txt", "rb");
     if (file == NULL) {
-        printf("Greska pri otvaranju datoteke za citanje.\n");
+        printf("Greska pri otvaranju datoteke - pretrazivanje slota.\n");
         return;
     }
 
