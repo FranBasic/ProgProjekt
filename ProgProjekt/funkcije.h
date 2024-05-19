@@ -54,5 +54,9 @@ void izbrisiLika(int slot);
 void prikaziSveLikove();
 void sortirajLikove();
 void pretraziSlot(int slot);
+void logo();
+void red();
+void blue();
+void reset();
 
 #endif

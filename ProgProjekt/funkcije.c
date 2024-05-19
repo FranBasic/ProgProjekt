@@ -5,6 +5,10 @@
 #include <string.h>
 #include "funkcije.h"
 
+#define MAX_SNAGA (lik->level * 5) + 10
+#define MIN_SNAGA 0
+#define MAX_ZDRAVLJE 200
+
 void ispisiIzbornik() {
     printf("\n\tODABERI POTEZ:\n");
     printf("1. Borba\n");
@@ -38,20 +42,6 @@ void zapocniIgru(const Lik* const lik) {
     napadniNeprijatelja(lik, neprijatelj);
 }
 
-void prikaziStanje(const Lik* const lik) {
-    if (lik == NULL) {
-        printf("Greska ucitavanja lika.\n");
-        return;
-    }
-
-    printf("\n-------------------\n*** Stanje lika ***\n");
-    printf("Ime: %s\n", lik->ime);
-    printf("Level: %d\n", lik->level);
-    printf("Zdravlje: %d\n", lik->zdravlje);
-    printf("Snaga: %d\n", lik->snaga);
-    printf("Bodovi: %d\n-------------------\n", lik->bodovi);
-}
-
 void napadniNeprijatelja(Lik* const lik, Neprijatelj* const neprijatelj) {
     printf("\nUlazis u borbenu poziciju...\n");
 
@@ -71,23 +61,23 @@ void napadniNeprijatelja(Lik* const lik, Neprijatelj* const neprijatelj) {
         switch (neprijatelj->level) {
         case 1:
             printf("10 bodova!\n-------------------\n\n");
-            lik->bodovi += 10;
+            lik->bodovi += 20;
             break;
         case 2:
             printf("15 bodova!\n-------------------\n\n");
-            lik->bodovi += 15;
+            lik->bodovi += 30;
             break;
         case 3:
             printf("20 bodova!\n-------------------\n\n");
-            lik->bodovi += 20;
+            lik->bodovi += 40;
             break;
         default:
             break;
         }
 
-        if (lik->bodovi >= 50) {
+        if (lik->bodovi >= 100) {
             lik->level++;
-            lik->bodovi -= 50;
+            lik->bodovi -= 100;
             printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n$$Cestitam! Postigli ste %d. lvl!$$\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n", lik->level);
         }
     }
@@ -95,6 +85,20 @@ void napadniNeprijatelja(Lik* const lik, Neprijatelj* const neprijatelj) {
         lik->zdravlje = 0;
         printf("Sramota! >:(\n%s te porazio. Vise srece sljedeci put!\n-------------------\n", neprijatelj->ime);
     }
+}
+
+void prikaziStanje(const Lik* const lik) {
+    if (lik == NULL) {
+        printf("Greska ucitavanja lika.\n");
+        return;
+    }
+
+    printf("\n-------------------\n*** Stanje lika ***\n");
+    printf("Ime: %s\n", lik->ime);
+    printf("Level: %d\n", lik->level);
+    printf("Zdravlje: %d\n", lik->zdravlje);
+    printf("Snaga: %d\n", lik->snaga);
+    printf("Bodovi: %d\n-------------------\n", lik->bodovi);
 }
 
 void treniraj(const Lik* const lik) {
@@ -131,19 +135,32 @@ void treniraj(const Lik* const lik) {
 }
 
 void trenirajZdravlje(Lik* const lik) {
-    lik->zdravlje += 50;
-    printf("\nMalo si odrijemao. Tvoje se zdravlje povecalo za +50\n");
+    int maxZdravlje = MAX_ZDRAVLJE;
+    int oporavak = (MAX_ZDRAVLJE / 4);
+
+    if (lik->zdravlje < MAX_ZDRAVLJE) {
+        lik->zdravlje += oporavak;
+        printf("\nMalo si odrijemao. Tvoje se zdravlje povecalo za +%d\n", oporavak);
+    }
+    else {
+        lik->snaga -= 2;
+        printf("\nProveo si cijeli dan u krevetu, snaga ti je pala za -2\n");
+
+        if (lik->snaga < MIN_SNAGA){
+            lik->snaga = MIN_SNAGA;
+        }
+    }
 }
 
 void trenirajSnagu(Lik* const lik) {
-    int maxSnaga = lik->level * 5;
+    int maxSnaga = MAX_SNAGA;
 
-    if (lik->snaga < (maxSnaga + 10)) {
+    if (lik->snaga < maxSnaga) {
         lik->snaga += 1;
         printf("\nDigao si 300 u benchu, snaga ti je povecana za +1\n");
     }
     else {
-        printf("\nVec si dostigao maksimalnu snagu za ovaj level!\n");
+        printf("\nVec si dostigao maksimalnu snagu (%d) za level %d!\n", maxSnaga, lik->level);
     }
 }
 
@@ -197,6 +214,41 @@ void ucitajLika(Lik* lik, int slot) {
     fclose(file);
 }
 
+void izbrisiLika(int slot) {
+    char da = 0;
+    printf("Zelite li izbrisati slot %d?\nD za da ili N za ne\n", slot + 1);
+
+    while(1){
+        scanf(" %c", &da);
+
+        while (getchar() != '\n');
+
+        if (da == 'd' || da == 'D') {
+            FILE* file = fopen("likovi.txt", "r+b");
+            if (file == NULL) {
+                printf("Greska pri otvaranju datoteke - brisanje lika.\n");
+                return;
+            }
+
+            Lik prazniLik = { "", 0, 0, 0, 0 };
+            fseek(file, slot * sizeof(Lik), SEEK_SET);
+            fwrite(&prazniLik, sizeof(Lik), 1, file);
+
+            fclose(file);
+            printf("Slot %d je izbrisan.\n", slot + 1);
+            return;
+        }
+        else if (da == 'n' || da == 'N') {
+            printf("Brisanje slota je otkazano.\n");
+            return;
+        }
+        else {
+            printf("Neispravan unos.\nD za da ili N za ne\n");
+        }
+    }
+    
+}
+
 void napraviNovogLika(Lik* lik) {
     if (lik == NULL) {
         printf("Greska pri kreiranju lika.\n");
@@ -216,39 +268,35 @@ void napraviNovogLika(Lik* lik) {
     printf("\n%s je uspjesno kreiran!\n", lik->ime);
 }
 
-void izbrisiLika(int slot) {
-    char da = 0;
-    printf("Zelite li izbrisati slot %d?\nD za da ili N za ne\n", slot + 1);
-
-    while(1){
-        scanf(" %c", &da);
-
-        while (getchar() != '\n');
-
-        if (da == 'd' || da == 'D') {
-            FILE* file = fopen("likovi.txt", "r+b");
-            if (file == NULL) {
-                printf("Greska pri otvaranju datoteke - brisanje lika.\n");
-                return;
-            }
-
-            Lik prazniLik = { "", 0, 0, 0, 0 };              //vazi li se kao brisanje?
-            fseek(file, slot * sizeof(Lik), SEEK_SET);
-            fwrite(&prazniLik, sizeof(Lik), 1, file);
-
-            fclose(file);
-            printf("Slot %d je izbrisan.\n", slot + 1);
-            return;
-        }
-        else if (da == 'n' || da == 'N') {
-            printf("Brisanje slota je otkazano.\n");
-            return;
-        }
-        else {
-            printf("Neispravan unos.\nD za da ili N za ne\n");
-        }
+void pretraziSlot(int slot) {
+    if (slot < 0 || slot >= 3) {
+        printf("Neispravan broj slota.\n");
+        return;
     }
-    
+
+    FILE* file = fopen("likovi.txt", "rb");
+    if (file == NULL) {
+        printf("Greska pri otvaranju datoteke - pretrazivanje slota.\n");
+        return;
+    }
+
+    fseek(file, slot * sizeof(Lik), SEEK_SET);
+
+    Lik lik;
+    size_t trazeniLik = fread(&lik, sizeof(Lik), 1, file);
+    if (trazeniLik != 1 || lik.ime[0] == '\0') {
+        printf("Prazan slot.\n");
+    }
+    else {
+        printf("\n*** Slot %d ***\n", slot + 1);
+        printf("Ime: %s\n", lik.ime);
+        printf("Level: %d\n", lik.level);
+        printf("Zdravlje: %d\n", lik.zdravlje);
+        printf("Snaga: %d\n", lik.snaga);
+        printf("Bodovi: %d\n", lik.bodovi);
+    }
+
+    fclose(file);
 }
 
 void prikaziSveLikove() {
@@ -263,7 +311,7 @@ void prikaziSveLikove() {
         fseek(file, i * sizeof(Lik), SEEK_SET);
         fread(&lik, sizeof(Lik), 1, file);
         if (lik.ime[0] != '\0') {
-            printf("\n*** Slot %d ***\n", i + 1);
+            printf("\n-------------------\n*** Slot %d ***\n", i + 1);
             printf("Ime: %s\n", lik.ime);
             printf("Level: %d\n", lik.level);
             printf("Zdravlje: %d\n", lik.zdravlje);
@@ -308,33 +356,47 @@ void sortirajLikove() {
     printf("Likovi su uspjesno sortirani prema levelu.\n");
 }
 
-void pretraziSlot(int slot) {
-    if (slot < 0 || slot >= 3) {
-        printf("Neispravan broj slota.\n");
-        return;
-    }
 
-    FILE* file = fopen("likovi.txt", "rb");
-    if (file == NULL) {
-        printf("Greska pri otvaranju datoteke - pretrazivanje slota.\n");
-        return;
-    }
 
-    fseek(file, slot * sizeof(Lik), SEEK_SET);
-
-    Lik lik;
-    size_t trazeniLik = fread(&lik, sizeof(Lik), 1, file);
-    if (trazeniLik != 1 || lik.ime[0] == '\0') {
-        printf("Prazan slot.\n");
-    }
-    else {
-        printf("\n*** Slot %d ***\n", slot + 1);
-        printf("Ime: %s\n", lik.ime);
-        printf("Level: %d\n", lik.level);
-        printf("Zdravlje: %d\n", lik.zdravlje);
-        printf("Snaga: %d\n", lik.snaga);
-        printf("Bodovi: %d\n", lik.bodovi);
-    }
-
-    fclose(file);
+void red() {
+    printf("\033[1;31m");
+}
+void blue() {
+    printf("\033[0;34m");
+}
+void reset() {
+    printf("\033[0m");
+}
+void logo() {
+    blue();
+    printf("                         ########                      \n");
+    printf("                      ####  ||  ####                   \n");
+    printf("                  ####      ||      ####               \n");
+    printf("                ###         ||         ####            \n");
+    printf("            #####==         ||         ==####          \n");
+    printf("        #####   ||  ===     ||     ===  ||  #####      \n");
+    printf("      ###       ||     ===  "); red(); printf("##"); blue(); printf("  ===     ||      ###\n");
+    printf("   ###          ||        ");red(); printf("####"); blue(); printf("==        ||         ### \n");
+    printf("   ##===        ||     "); red(); printf("#######"); blue(); printf("  ==      ||      ====## \n");
+    printf("   ##    ===    || "); red(); printf("###########"); blue(); printf("     ==   ||   ===    ## \n");
+    printf("   ##       === "); red(); printf("##############"); blue(); printf("        = ## =        ## \n");
+    printf("   ##          ="); red(); printf("#### "); reset(); printf("IZLAZ"); red(); printf(" ###"); blue(); printf("        ####=         ## \n");
+    printf("   ##       === "); red(); printf("##############"); blue(); printf("     ####### ===      ## \n");
+    printf("   ##   ===     "); red(); printf("##### "); reset(); printf("IZ"); red(); printf(" #####"); blue(); printf("  ##########    ===   ## \n");
+    printf("   ##==         "); red(); printf("##############"); blue(); printf("############        ==## \n");
+    printf("   ##==         "); red(); printf("###########"); blue(); printf(" ##############        ==## \n");
+    printf("   ##   ===     "); red(); printf("########    "); blue(); printf("## "); reset(); printf("PROGRAMA"); blue(); printf(" ##    ===   ## \n");
+    printf("   ##       === "); red(); printf("#####"); blue(); printf("       ############## ==       ## \n");
+    printf("   ##         =="); red(); printf("##"); blue(); printf("=         ##############=         ## \n");
+    printf("   ##      ===  ||  ==      ########### || ===      ## \n");
+    printf("   ##   ===     ||    ===   ########    ||    ===   ## \n");
+    printf("   ##===        ||       == #####       ||       ===## \n");
+    printf("   ###          ||        ==###==       ||         ### \n");
+    printf("      ####      ||    ====  ||   ==     ||     ####    \n");
+    printf("          ###   || ===      ||     ===  ||  ###        \n");
+    printf("             ####==         ||        ==####           \n");
+    printf("                ####        ||       ####              \n");
+    printf("                    ###     ||    ###                  \n");
+    printf("                       ###########                     \n"); reset();
+    printf("      Fran Basic          "); blue(); printf("#####"); reset(); printf("            SR-1        \n");
 }
