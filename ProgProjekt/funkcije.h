@@ -41,22 +41,19 @@ enum Izbor2 {
 };
 
 void ispisiIzbornik();
-void napraviNovogLika(Lik* lik);
 void zapocniIgru(const Lik* const lik);
+void napadniNeprijatelja(const Lik* const lik, Neprijatelj* const neprijatelj);
 void prikaziStanje(const Lik* const lik);
 void treniraj(const Lik* const lik);
 void trenirajZdravlje(Lik* const lik);
 void trenirajSnagu(Lik* const lik);
-void napadniNeprijatelja(const Lik* const lik, Neprijatelj* const neprijatelj);
 void spremiLika(const Lik* const lik, int slot);
 void ucitajLika(Lik* lik, int slot);
+void napraviNovogLika(Lik* lik);
 void izbrisiLika(int slot);
+void pretraziSlot(int slot);
 void prikaziSveLikove();
 void sortirajLikove();
-void pretraziSlot(int slot);
 void logo();
-void red();
-void blue();
-void reset();
 
 #endif
