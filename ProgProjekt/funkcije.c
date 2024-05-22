@@ -9,6 +9,10 @@
 #define MIN_SNAGA 0
 #define MAX_ZDRAVLJE 200
 
+#define red printf("\033[1;31m");
+#define blue printf("\033[0;34m");
+#define reset printf("\033[0m");
+
 void ispisiIzbornik() {
     printf("\n\tODABERI POTEZ:\n");
     printf("1. Borba\n");
@@ -319,7 +323,7 @@ void prikaziSveLikove() {
             printf("Bodovi: %d\n", lik.bodovi);
         }
         else {
-            printf("\nSlot %d je prazan.\n", i + 1);
+            printf("\n-------------------\nSlot %d je prazan.\n", i + 1);
         }
     }
 
@@ -356,38 +360,27 @@ void sortirajLikove() {
     printf("Likovi su uspjesno sortirani prema levelu.\n");
 }
 
-
-
-void red() {
-    printf("\033[1;31m");
-}
-void blue() {
-    printf("\033[0;34m");
-}
-void reset() {
-    printf("\033[0m");
-}
 void logo() {
-    blue();
+    blue
     printf("                         ########                      \n");
     printf("                      ####  ||  ####                   \n");
     printf("                  ####      ||      ####               \n");
     printf("                ###         ||         ####            \n");
     printf("            #####==         ||         ==####          \n");
     printf("        #####   ||  ===     ||     ===  ||  #####      \n");
-    printf("      ###       ||     ===  "); red(); printf("##"); blue(); printf("  ===     ||      ###\n");
-    printf("   ###          ||        ");red(); printf("####"); blue(); printf("==        ||         ### \n");
-    printf("   ##===        ||     "); red(); printf("#######"); blue(); printf("  ==      ||      ====## \n");
-    printf("   ##    ===    || "); red(); printf("###########"); blue(); printf("     ==   ||   ===    ## \n");
-    printf("   ##       === "); red(); printf("##############"); blue(); printf("        = ## =        ## \n");
-    printf("   ##          ="); red(); printf("#### "); reset(); printf("IZLAZ"); red(); printf(" ###"); blue(); printf("        ####=         ## \n");
-    printf("   ##       === "); red(); printf("##############"); blue(); printf("     ####### ===      ## \n");
-    printf("   ##   ===     "); red(); printf("##### "); reset(); printf("IZ"); red(); printf(" #####"); blue(); printf("  ##########    ===   ## \n");
-    printf("   ##==         "); red(); printf("##############"); blue(); printf("############        ==## \n");
-    printf("   ##==         "); red(); printf("###########"); blue(); printf(" ##############        ==## \n");
-    printf("   ##   ===     "); red(); printf("########    "); blue(); printf("## "); reset(); printf("PROGRAMA"); blue(); printf(" ##    ===   ## \n");
-    printf("   ##       === "); red(); printf("#####"); blue(); printf("       ############## ==       ## \n");
-    printf("   ##         =="); red(); printf("##"); blue(); printf("=         ##############=         ## \n");
+    printf("      ###       ||     ===  "); red printf("##"); blue printf("  ===     ||      ###\n");
+    printf("   ###          ||        ");red printf("####"); blue printf("==        ||         ### \n");
+    printf("   ##===        ||     "); red printf("#######"); blue printf("  ==      ||      ====## \n");
+    printf("   ##    ===    || "); red printf("###########"); blue printf("     ==   ||   ===    ## \n");
+    printf("   ##       === "); red printf("##############"); blue printf("        = ## =        ## \n");
+    printf("   ##          ="); red printf("#### "); reset printf("IZLAZ"); red printf(" ###"); blue printf("        ####=         ## \n");
+    printf("   ##       === "); red printf("##############"); blue printf("     ####### ===      ## \n");
+    printf("   ##   ===     "); red printf("##### "); reset printf("IZ"); red printf(" #####"); blue printf("  ##########    ===   ## \n");
+    printf("   ##==         "); red printf("##############"); blue printf("############        ==## \n");
+    printf("   ##==         "); red printf("###########"); blue printf(" ##############        ==## \n");
+    printf("   ##   ===     "); red printf("########    "); blue printf("## "); reset printf("PROGRAMA"); blue printf(" ##    ===   ## \n");
+    printf("   ##       === "); red printf("#####"); blue printf("       ############## ==       ## \n");
+    printf("   ##         =="); red printf("##"); blue printf("=         ##############=         ## \n");
     printf("   ##      ===  ||  ==      ########### || ===      ## \n");
     printf("   ##   ===     ||    ===   ########    ||    ===   ## \n");
     printf("   ##===        ||       == #####       ||       ===## \n");
@@ -397,6 +390,6 @@ void logo() {
     printf("             ####==         ||        ==####           \n");
     printf("                ####        ||       ####              \n");
     printf("                    ###     ||    ###                  \n");
-    printf("                       ###########                     \n"); reset();
-    printf("      Fran Basic          "); blue(); printf("#####"); reset(); printf("            SR-1        \n");
+    printf("                       ###########                     \n"); reset
+    printf("      Fran Basic          "); blue printf("#####"); reset printf("            SR-1        \n");
 }
