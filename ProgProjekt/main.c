@@ -9,7 +9,6 @@ int main() {
     Lik igrac = { "Lorem", 1, 100, 10, 0 };
 
     srand((unsigned)time(NULL));
-    static enum Izbor izbor;
 
     printf("\t\t-----FERIT RPG-----\n\nUnesite ime svog lika: ");
     scanf("%24[^\n]", igrac.ime);
@@ -17,7 +16,7 @@ int main() {
 
     do {
         system("cls");
-        ispisiIzbornik();
+        ispisi_izbornik();
         printf("\n\t\t\t\t\tOdabirem: ");
 
         if (scanf("%d", &izbor) != 1) {
@@ -30,10 +29,10 @@ int main() {
         switch (izbor) {
             system("cls");
         case ZAPOCNI_IGRU:
-            zapocniIgru(&igrac);
+            zapocni_igru(&igrac);
             break;
         case PRIKAZI_STANJE:
-            prikaziStanje(&igrac);
+            prikazi_stanje(&igrac);
             break;
         case TRENIRAJ:
             treniraj(&igrac);
@@ -41,8 +40,8 @@ int main() {
         case SPREMI_LIKA:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
-            if (slot >= 1 && slot <= 3) {
-                spremiLika(&igrac, slot - 1);
+            if (slot >= 1 && slot <= BROJ_LIKOVA) {
+                spremi_lika(&igrac, slot - 1);
             }
             else {
                 printf("Neispravan broj slota.\n");
@@ -51,8 +50,8 @@ int main() {
         case UCITAJ_LIKA:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
-            if (slot >= 1 && slot <= 3) {
-                ucitajLika(&igrac, slot - 1);
+            if (slot >= 1 && slot <= BROJ_LIKOVA) {
+                ucitaj_lika(&igrac, slot - 1);
             }
             else {
                 printf("Neispravan broj slota.\n");
@@ -61,26 +60,26 @@ int main() {
         case IZBRISI_LIKA:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
-            if (slot >= 1 && slot <= 3) {
-                izbrisiLika(slot - 1);
+            if (slot >= 1 && slot <= BROJ_LIKOVA) {
+                izbrisi_lika(slot - 1);
             }
             else {
                 printf("Neispravan broj slota.\n");
             }
             break;
         case PRIKAZI_SVE_LIKOVE:
-            prikaziSveLikove();
+            prikazi_sve_likove();
             break;
         case SORTIRAJ_LIKOVE:
-            sortirajLikove();
+            sortiraj_likove();
             break;
         case NAPRAVI_NOVOG_LIKA:
-            napraviNovogLika(&igrac);
+            napravi_novog_lika(&igrac);
             break;
         case PRETRAZI_SLOT:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
-            pretraziSlot(slot - 1);
+            pretrazi_slot(slot - 1);
             break;
         case IZLAZ:
             logo();

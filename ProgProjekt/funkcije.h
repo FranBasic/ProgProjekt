@@ -3,10 +3,21 @@
 #ifndef FUNKCIJE_H
 #define FUNKCIJE_H
 
-#define imeMax 25
+#define ime_max 25
+#define MAX_SNAGA (lik->level * 5) + 10
+#define MIN_SNAGA 0
+#define MAX_ZDRAVLJE 200
+#define BROJ_LIKOVA 3
+
+#define red printf("\033[1;31m");
+#define blue printf("\033[0;34m");
+#define reset printf("\033[0m");
+
+static enum Izbor izbor;
+static enum Izbor2 izbor2;
 
 typedef struct {
-    char ime[imeMax];
+    char ime[ime_max];
     int level;
     int zdravlje;
     int snaga;
@@ -14,7 +25,7 @@ typedef struct {
 } Lik;
 
 typedef struct {
-    char ime[imeMax];
+    char ime[ime_max];
     int level;
     int zdravlje;
     int snaga;
@@ -40,20 +51,20 @@ enum Izbor2 {
     IZLAZ_TRENING
 };
 
-void ispisiIzbornik();
-void zapocniIgru(const Lik* const lik);
-void napadniNeprijatelja(const Lik* const lik, Neprijatelj* const neprijatelj);
-void prikaziStanje(const Lik* const lik);
+void ispisi_izbornik();
+void zapocni_igru(const Lik* const lik);
+void napadni_neprijatelja(const Lik* const lik, Neprijatelj* const neprijatelj);
+void prikazi_stanje(const Lik* const lik);
 void treniraj(const Lik* const lik);
-void trenirajZdravlje(Lik* const lik);
-void trenirajSnagu(Lik* const lik);
-void spremiLika(const Lik* const lik, int slot);
-void ucitajLika(Lik* lik, int slot);
-void napraviNovogLika(Lik* lik);
-void izbrisiLika(int slot);
-void pretraziSlot(int slot);
-void prikaziSveLikove();
-void sortirajLikove();
+void treniraj_zdravlje(Lik* const lik);
+void treniraj_snagu(Lik* const lik);
+void spremi_lika(const Lik* const lik, int slot);
+void ucitaj_lika(Lik* lik, int slot);
+void napravi_novog_lika(Lik* lik);
+void izbrisi_lika(int slot);
+void pretrazi_slot(int slot);
+void prikazi_sve_likove();
+void sortiraj_likove();
 void logo();
 
 #endif

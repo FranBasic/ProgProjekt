@@ -5,15 +5,7 @@
 #include <string.h>
 #include "funkcije.h"
 
-#define MAX_SNAGA (lik->level * 5) + 10
-#define MIN_SNAGA 0
-#define MAX_ZDRAVLJE 200
-
-#define red printf("\033[1;31m");
-#define blue printf("\033[0;34m");
-#define reset printf("\033[0m");
-
-void ispisiIzbornik() {
+void ispisi_izbornik() {
     printf("\n\tODABERI POTEZ:\n");
     printf("1. Borba\n");
     printf("2. Stanje\n");
@@ -28,7 +20,7 @@ void ispisiIzbornik() {
     printf("11. Izlaz iz igre\n");
 }
 
-void zapocniIgru(const Lik* const lik) {
+void zapocni_igru(const Lik* const lik) {
     if (lik == NULL) {
         printf("Greska ucitavanja lika.\n");
         return;
@@ -37,16 +29,16 @@ void zapocniIgru(const Lik* const lik) {
     printf("\n-------------------\nUlazis u FERIT u potrazi za suparnikom...\n");
 
     Neprijatelj neprijatelji[] = { {"Kostur Bivseg Studenta", 1, 30, 5}, {"Grdosija Mrchella", 2, 40, 10}, {"Carobnjak Shoyo", 3, 50, 15} };
-    int brojNeprijatelja = sizeof(neprijatelji) / sizeof(neprijatelji[0]);
+    int broj_neprijatelja = sizeof(neprijatelji) / sizeof(neprijatelji[0]);
 
-    int indeks = rand() % brojNeprijatelja;
+    int indeks = rand() % broj_neprijatelja;
     Neprijatelj* neprijatelj = &neprijatelji[indeks];
 
     printf("Uh Oh! Izazvao te %s, level %d!\n", neprijatelj->ime, neprijatelj->level);
-    napadniNeprijatelja(lik, neprijatelj);
+    napadni_neprijatelja(lik, neprijatelj);
 }
 
-void napadniNeprijatelja(Lik* const lik, Neprijatelj* const neprijatelj) {
+void napadni_neprijatelja(Lik* const lik, Neprijatelj* const neprijatelj) {
     printf("\nUlazis u borbenu poziciju...\n");
 
     if (lik == NULL || neprijatelj == NULL) {
@@ -91,7 +83,7 @@ void napadniNeprijatelja(Lik* const lik, Neprijatelj* const neprijatelj) {
     }
 }
 
-void prikaziStanje(const Lik* const lik) {
+void prikazi_stanje(const Lik* const lik) {
     if (lik == NULL) {
         printf("Greska ucitavanja lika.\n");
         return;
@@ -111,7 +103,7 @@ void treniraj(const Lik* const lik) {
     printf("2. Snagu\n");
     printf("3. Nista, mlahonja sam");
 
-    static enum Izbor2 izbor2;
+    //static enum Izbor2 izbor2;
 
     printf("\n\t\t\t\t\tOdabirem: ");
 
@@ -125,10 +117,10 @@ void treniraj(const Lik* const lik) {
 
     switch (izbor2) {
     case ZDRAVLJE:
-        trenirajZdravlje(lik);
+        treniraj_zdravlje(lik);
         break;
     case SNAGA:
-        trenirajSnagu(lik);
+        treniraj_snagu(lik);
         break;
     case IZLAZ_TRENING:
         break;
@@ -138,12 +130,14 @@ void treniraj(const Lik* const lik) {
     }
 }
 
-void trenirajZdravlje(Lik* const lik) {
-    int maxZdravlje = MAX_ZDRAVLJE;
+void treniraj_zdravlje(Lik* const lik) {
     int oporavak = (MAX_ZDRAVLJE / 4);
 
     if (lik->zdravlje < MAX_ZDRAVLJE) {
         lik->zdravlje += oporavak;
+        if (lik->zdravlje > MAX_ZDRAVLJE) {
+            lik->zdravlje = MAX_ZDRAVLJE;
+        }
         printf("\nMalo si odrijemao. Tvoje se zdravlje povecalo za +%d\n", oporavak);
     }
     else {
@@ -156,31 +150,29 @@ void trenirajZdravlje(Lik* const lik) {
     }
 }
 
-void trenirajSnagu(Lik* const lik) {
-    int maxSnaga = MAX_SNAGA;
-
-    if (lik->snaga < maxSnaga) {
+void treniraj_snagu(Lik* const lik) {
+    if (lik->snaga < MAX_SNAGA) {
         lik->snaga += 1;
         printf("\nDigao si 300 u benchu, snaga ti je povecana za +1\n");
     }
     else {
-        printf("\nVec si dostigao maksimalnu snagu (%d) za level %d!\n", maxSnaga, lik->level);
+        printf("\nVec si dostigao maksimalnu snagu (%d) za level %d!\n", MAX_SNAGA, lik->level);
     }
 }
 
-void spremiLika(const Lik* const lik, int slot) {
+void spremi_lika(const Lik* const lik, int slot) {
     FILE* file = fopen("likovi.txt", "r+b");
     if (file == NULL) {
         file = fopen("likovi.txt", "w+b");
         if (file == NULL) {
-            printf("Greska pri otvaranju datoteke - spremanje lika.\n");
+            perror("Greska pri otvaranju datoteke - spremanje lika.\n");
             return;
         }
     }
 
     Lik* temp = (Lik*)calloc(1, sizeof(Lik));
     if (temp == NULL) {
-        perror("Greska pri alokaciji memorije.\n");
+        perror("Greska pri alokaciji memorije - spremanje lika.\n");
         fclose(file);
         return;
     }
@@ -196,18 +188,18 @@ void spremiLika(const Lik* const lik, int slot) {
     printf("%s je uspjesno spremljen u slot %d.\n",lik->ime, slot + 1);
 }
 
-void ucitajLika(Lik* lik, int slot) {
+void ucitaj_lika(Lik* lik, int slot) {
     FILE* file = fopen("likovi.txt", "rb");
     if (file == NULL) {
-        printf("Greska pri otvaranju datoteke za citanje.\n");
+        perror("Greska pri otvaranju datoteke za citanje - ucitavanje lika.\n");
         return;
     }
 
     fseek(file, slot * sizeof(Lik), SEEK_SET);
 
     Lik temp;
-    size_t bytesRead = fread(&temp, sizeof(Lik), 1, file);
-    if (bytesRead != 1 || temp.ime[0] == '\0') {
+    size_t bytes_read = fread(&temp, sizeof(Lik), 1, file);
+    if (bytes_read != 1 || temp.ime[0] == '\0') {
         printf("Prazan slot.\n");
     }
     else {
@@ -218,9 +210,9 @@ void ucitajLika(Lik* lik, int slot) {
     fclose(file);
 }
 
-void izbrisiLika(int slot) {
+void izbrisi_lika(int slot) {
     char da = 0;
-    printf("Zelite li izbrisati slot %d?\nD za da ili N za ne\n", slot + 1);
+    printf("Zelite li izbrisati lika u slotu %d?\nD za da ili N za ne\n", slot + 1);
 
     while(1){
         scanf(" %c", &da);
@@ -230,20 +222,20 @@ void izbrisiLika(int slot) {
         if (da == 'd' || da == 'D') {
             FILE* file = fopen("likovi.txt", "r+b");
             if (file == NULL) {
-                printf("Greska pri otvaranju datoteke - brisanje lika.\n");
+                perror("Greska pri otvaranju datoteke - brisanje lika.\n");
                 return;
             }
 
-            Lik prazniLik = { "", 0, 0, 0, 0 };
+            Lik prazni_lik = { "", 0, 0, 0, 0 };
             fseek(file, slot * sizeof(Lik), SEEK_SET);
-            fwrite(&prazniLik, sizeof(Lik), 1, file);
+            fwrite(&prazni_lik, sizeof(Lik), 1, file);
 
             fclose(file);
-            printf("Slot %d je izbrisan.\n", slot + 1);
+            printf("Lik u slotu %d je izbrisan.\n", slot + 1);
             return;
         }
         else if (da == 'n' || da == 'N') {
-            printf("Brisanje slota je otkazano.\n");
+            printf("Brisanje lika je otkazano.\n");
             return;
         }
         else {
@@ -253,7 +245,7 @@ void izbrisiLika(int slot) {
     
 }
 
-void napraviNovogLika(Lik* lik) {
+void napravi_novog_lika(Lik* lik) {
     if (lik == NULL) {
         printf("Greska pri kreiranju lika.\n");
         return;
@@ -272,23 +264,23 @@ void napraviNovogLika(Lik* lik) {
     printf("\n%s je uspjesno kreiran!\n", lik->ime);
 }
 
-void pretraziSlot(int slot) {
-    if (slot < 0 || slot >= 3) {
+void pretrazi_slot(int slot) {
+    if (slot < 0 || slot >= BROJ_LIKOVA) {
         printf("Neispravan broj slota.\n");
         return;
     }
 
     FILE* file = fopen("likovi.txt", "rb");
     if (file == NULL) {
-        printf("Greska pri otvaranju datoteke - pretrazivanje slota.\n");
+        perror("Greska pri otvaranju datoteke - pretrazivanje slota.\n");
         return;
     }
 
     fseek(file, slot * sizeof(Lik), SEEK_SET);
 
     Lik lik;
-    size_t trazeniLik = fread(&lik, sizeof(Lik), 1, file);
-    if (trazeniLik != 1 || lik.ime[0] == '\0') {
+    size_t trazeni_lik = fread(&lik, sizeof(Lik), 1, file);
+    if (trazeni_lik != 1 || lik.ime[0] == '\0') {
         printf("Prazan slot.\n");
     }
     else {
@@ -303,15 +295,15 @@ void pretraziSlot(int slot) {
     fclose(file);
 }
 
-void prikaziSveLikove() {
+void prikazi_sve_likove() {
     FILE* file = fopen("likovi.txt", "rb");
     if (file == NULL) {
-        printf("Greska pri otvaranju datoteke - prikazivanje svih slotova.\n");
+        perror("Greska pri otvaranju datoteke - prikazivanje svih slotova.\n");
         return;
     }
 
     Lik lik;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < BROJ_LIKOVA; ++i) {
         fseek(file, i * sizeof(Lik), SEEK_SET);
         fread(&lik, sizeof(Lik), 1, file);
         if (lik.ime[0] != '\0') {
@@ -330,28 +322,28 @@ void prikaziSveLikove() {
     fclose(file);
 }
 
-int usporediLevele(const void* a, const void* b) {
-    Lik* likA = (Lik*)a;
-    Lik* likB = (Lik*)b;
-    return likB->level - likA->level;
+int usporedi_levele(const void* a, const void* b) {
+    Lik* lik_A = (Lik*)a;
+    Lik* lik_B = (Lik*)b;
+    return lik_B->level - lik_A->level;
 }
 
-void sortirajLikove() {
+void sortiraj_likove() {
     FILE* file = fopen("likovi.txt", "rb+");
     if (file == NULL) {
-        printf("Greska pri otvaranju datoteke - sortiranje.\n");
+        perror("Greska pri otvaranju datoteke - sortiranje.\n");
         return;
     }
 
-    Lik likovi[3];
-    for (int i = 0; i < 3; ++i) {
+    Lik likovi[BROJ_LIKOVA];
+    for (int i = 0; i < BROJ_LIKOVA; ++i) {
         fseek(file, i * sizeof(Lik), SEEK_SET);
         fread(&likovi[i], sizeof(Lik), 1, file);
     }
 
-    qsort(likovi, 3, sizeof(Lik), usporediLevele);
+    qsort(likovi, BROJ_LIKOVA, sizeof(Lik), usporedi_levele);
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < BROJ_LIKOVA; ++i) {
         fseek(file, i * sizeof(Lik), SEEK_SET);
         fwrite(&likovi[i], sizeof(Lik), 1, file);
     }
