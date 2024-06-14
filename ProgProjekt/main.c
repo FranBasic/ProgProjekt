@@ -6,7 +6,17 @@
 #include "funkcije.h"
 
 int main() {
-    Lik igrac = { "Lorem", 1, 100, 10, 0 };
+    Lik igrac;
+    igrac.ime = (char*)calloc(IME_MAX, sizeof(char));
+    if (igrac.ime == NULL) {
+        perror("Greska memorije.");
+        return;
+    }
+
+    igrac.level = 1;
+    igrac.zdravlje = 100;
+    igrac.snaga = 10;
+    igrac.bodovi = 0;
 
     srand((unsigned)time(NULL));
 
@@ -17,7 +27,6 @@ int main() {
     do {
         system("cls");
         ispisi_izbornik();
-        printf("\n\t\t\t\t\tOdabirem: ");
 
         if (scanf("%d", &izbor) != 1) {
             printf("\nUnesite broj!\n");
@@ -25,11 +34,11 @@ int main() {
             continue;
         }
 
-        int slot;
+        int slot = 0;
         switch (izbor) {
             system("cls");
         case ZAPOCNI_IGRU:
-            zapocni_igru(&igrac);
+            start(&igrac);
             break;
         case PRIKAZI_STANJE:
             prikazi_stanje(&igrac);
@@ -40,6 +49,7 @@ int main() {
         case SPREMI_LIKA:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
+
             if (slot >= 1 && slot <= BROJ_LIKOVA) {
                 spremi_lika(&igrac, slot - 1);
             }
@@ -50,6 +60,7 @@ int main() {
         case UCITAJ_LIKA:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
+
             if (slot >= 1 && slot <= BROJ_LIKOVA) {
                 ucitaj_lika(&igrac, slot - 1);
             }
@@ -60,6 +71,8 @@ int main() {
         case IZBRISI_LIKA:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
+            while (getchar() != '\n');
+
             if (slot >= 1 && slot <= BROJ_LIKOVA) {
                 izbrisi_lika(slot - 1);
             }
@@ -71,7 +84,7 @@ int main() {
             prikazi_sve_likove();
             break;
         case SORTIRAJ_LIKOVE:
-            sortiraj_likove();
+            sortiranje_likova();
             break;
         case NAPRAVI_NOVOG_LIKA:
             napravi_novog_lika(&igrac);
@@ -79,7 +92,9 @@ int main() {
         case PRETRAZI_SLOT:
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
-            pretrazi_slot(slot - 1);
+
+            while (getchar() != '\n');
+            pretrazi_slot_og(slot - 1);
             break;
         case IZLAZ:
             logo();
@@ -89,7 +104,8 @@ int main() {
             break;
         }
         system("pause");
-    } while (izbor != IZLAZ);
+    } while (izbor != IZLAZ); 
 
+    free(igrac.ime);
     return 0;
 }
