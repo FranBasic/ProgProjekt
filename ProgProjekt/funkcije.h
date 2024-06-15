@@ -13,8 +13,7 @@
 #define blue printf("\033[0;34m");
 #define reset printf("\033[0m");
 
-static enum Izbor izbor;
-static enum Izbor2 izbor2;
+//static enum Izbor izbor;
 
 typedef struct {
     char* ime;
@@ -42,6 +41,7 @@ enum Izbor {
     PRETRAZI_SLOT,
     PRIKAZI_SVE_LIKOVE,
     SORTIRAJ_LIKOVE,//10
+    PREIMENUJ_LIKA,
     IZLAZ
 };
 
@@ -58,16 +58,18 @@ void prikazi_stanje(const Lik* const lik);
 void treniraj(const Lik* const lik);
 void treniraj_zdravlje(Lik* const lik);
 void treniraj_snagu(Lik* const lik);
-void spremi_lika(const Lik* const lik, int slot);
+void spremi_lika(Lik* const lik, int slot);
 void ucitaj_lika(Lik* lik, int slot);
 void napravi_novog_lika(Lik* lik);
 void izbrisi_lika(int slot);
 void pretrazi_slot_sort(int slot, Lik* lik);
 void pretrazi_slot_og(int slot);
 void prikazi_sve_likove();
+void promjeni_ime(int slot, const char* novo_ime);
 void sortiraj_likove(Lik* likovi, int broj_likova);
 void sortiranje_likova();
 int usporedi_levele(const void* a, const void* b);
 void logo();
 
 #endif
+

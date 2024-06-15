@@ -16,8 +16,9 @@ void ispisi_izbornik() {
     printf("7. Napravi novog lika\n");
     printf("8. Pretrazi slot\n");
     printf("9. Prikazi sve slotove\n");
-    printf("10. Sortiraj likove\n");
-    printf("11. Izlaz iz igre\n");
+    printf("10. Prikazi likove sortirane po levelu\n");
+    printf("11. Preimenuj lika\n");
+    printf("12. Izlaz iz igre\n");
     printf("\n\t\t\t\t\tOdabirem: ");
 }
 
@@ -103,13 +104,14 @@ void prikazi_stanje(const Lik* const lik) {
 }
 
 void treniraj(const Lik* const lik) {
+    static enum Izbor2 izbor2;
+
     printf("\nSta zelis trenirati?\n");
     printf("1. Zdravlje\n");
     printf("2. Snagu\n");
     printf("3. Nista, mlahonja sam");
 
     printf("\n\t\t\t\t\tOdabirem: ");
-
     if (scanf("%d", &izbor2) == 1) {
         while (getchar() != '\n');
     }
@@ -174,7 +176,7 @@ void treniraj_snagu(Lik* const lik) {
 }
 
 void spremi_lika(Lik* const lik, int slot) {
-    char* filename;
+    char* filename = NULL;
 
     if (slot == 0) {
         filename = "slot1.txt";
@@ -182,8 +184,11 @@ void spremi_lika(Lik* const lik, int slot) {
     else if (slot == 1) {
         filename = "slot2.txt";
     }
-    else {
+    else if (slot == 2) {
         filename = "slot3.txt";
+    }
+    else {
+        perror("Greska kod spremanja lika.");
     }
 
     FILE* file = fopen(filename, "wb");
@@ -199,19 +204,23 @@ void spremi_lika(Lik* const lik, int slot) {
     fwrite(&lik->bodovi, sizeof(int), 1, file);
 
     fclose(file);
-    printf("Lik je uspjesno spremljen u slot %d.\n", slot + 1);
+    printf("\n%s je uspjesno spremljen u slot %d.\n",lik->ime, slot + 1);
 }
 
 void ucitaj_lika(Lik* lik, int slot) {
-    char* filename;
+    char* filename = NULL;
     if (slot == 0) {
         filename = "slot1.txt";
     }
     else if (slot == 1) {
         filename = "slot2.txt";
     }
-    else {
+    else if (slot == 2) {
         filename = "slot3.txt";
+    }
+    else {
+        printf("Greska kod ucitavanja lika.\n");
+        return;
     }
 
     FILE* file = fopen(filename, "rb");
@@ -228,40 +237,45 @@ void ucitaj_lika(Lik* lik, int slot) {
 
     fclose(file);
 
-    printf("%s je uspjesno ucitan iz slota %d.\n", lik->ime, slot + 1);
+    printf("\n%s je uspjesno ucitan iz slota %d.\n", lik->ime, slot + 1);
 }
 
 void izbrisi_lika(int slot) {
     char da = 0;
-    printf("Zelite li izbrisati lika u slotu %d?\nD za da ili N za ne\n", slot + 1);
+    printf("\nZelite li izbrisati lika u slotu %d?\nD za da ili N za ne\n", slot + 1);
+    printf("\t\t\t\t\tOdabirem: ");
 
     while(1){
         scanf(" %c", &da);
         while (getchar() != '\n');
 
         if (da == 'd' || da == 'D') {
-            char* filename;
+            char* filename = NULL;
             if (slot == 0) {
                 filename = "slot1.txt";
             }
             else if (slot == 1) {
                 filename = "slot2.txt";
             }
-            else {
+            else if (slot == 2) {
                 filename = "slot3.txt";
+            }
+            else {
+                printf("Greska kod brisanja lika.\n");
+                return;
             }
 
             remove(filename);
 
-            printf("Slotu %d je izbrisan.\n", slot + 1);
+            printf("\nSlot %d je izbrisan.\n", slot + 1);
             return;
         }
         else if (da == 'n' || da == 'N') {
-            printf("Brisanje lika je otkazano.\n");
+            printf("\nBrisanje lika je otkazano.\n");
             return;
         }
         else {
-            printf("Neispravan unos.\nD za da ili N za ne\n");
+            printf("\nNeispravan unos.\nD za da ili N za ne\n");
         }
     }
 }
@@ -284,8 +298,7 @@ void napravi_novog_lika(Lik* lik) {
     lik->snaga = 10;
     lik->bodovi = 0;
 
-    printf("\n-------------------\n*** Kreiranje novog lika ***\n");
-    printf("Unesite ime: ");
+    printf("Unesite ime novog lika: ");
     getchar();
     scanf("%24[^\n]", lik->ime);
     getchar();
@@ -294,7 +307,7 @@ void napravi_novog_lika(Lik* lik) {
 }
 
 void pretrazi_slot_og(int slot) {
-    char* filename;
+    char* filename = NULL;
     if (slot == 0) {
         filename = "slot1.txt";
     }
@@ -353,13 +366,52 @@ void prikazi_sve_likove() {
     }
 }
 
+void promjeni_ime(int slot, const char* novo_ime) {
+    char* filename = NULL;
+    Lik igrac;
+
+    igrac.ime = (char*)calloc(IME_MAX, sizeof(char));
+    if (igrac.ime == NULL) {
+        perror("Greska memorije - mjenjanje imena.");
+        return;
+    }
+
+    if (slot == 0) {
+        filename = "slot1.txt";
+    }
+    else if (slot == 1) {
+        filename = "slot2.txt";
+    }
+    else {
+        filename = "slot3.txt";
+    }
+
+    FILE* file = fopen(filename, "rb+");
+    if (file == NULL) {
+        perror("Greska otvaranja datoteke - mjenjanje imena.\n");
+        free(igrac.ime);
+        return;
+    }
+
+    fseek(file, 0, SEEK_SET);
+
+    strncpy(igrac.ime, novo_ime, IME_MAX - 1);
+    igrac.ime[IME_MAX - 1] = '\0';
+
+    fwrite(igrac.ime, sizeof(char), IME_MAX, file);
+
+    fclose(file);
+    free(igrac.ime);
+    printf("\nIme lika u slotu %d je promjenjeno.\n", slot + 1);
+}
+
 void sortiranje_likova() {
     Lik likovi[BROJ_LIKOVA];
 
     for (int i = 0; i < BROJ_LIKOVA; i++) {
         likovi[i].ime = (char*)calloc(IME_MAX, sizeof(char));
         if (likovi[i].ime == NULL) {
-            perror("Greska memorije - inicijalizacija lika.");
+            perror("Greska memorije - sortiranje lika.");
             return;
         }
         pretrazi_slot_sort(i, &likovi[i]);
@@ -376,7 +428,7 @@ void sortiranje_likova() {
     }
 }
 void pretrazi_slot_sort(int slot, Lik* lik) {
-    char* filename;
+    char* filename = NULL;
     if (slot == 0) {
         filename = "slot1.txt";
     }

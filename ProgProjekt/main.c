@@ -8,6 +8,8 @@
 int main() {
     Lik igrac;
     igrac.ime = (char*)calloc(IME_MAX, sizeof(char));
+    char novo_ime[IME_MAX];
+
     if (igrac.ime == NULL) {
         perror("Greska memorije.");
         return;
@@ -19,6 +21,7 @@ int main() {
     igrac.bodovi = 0;
 
     srand((unsigned)time(NULL));
+    static enum Izbor izbor;
 
     printf("\t\t-----FERIT RPG-----\n\nUnesite ime svog lika: ");
     scanf("%24[^\n]", igrac.ime);
@@ -95,6 +98,21 @@ int main() {
 
             while (getchar() != '\n');
             pretrazi_slot_og(slot - 1);
+            break;
+        case PREIMENUJ_LIKA:
+            printf("Unesite broj slota (1, 2 ili 3): ");
+            scanf("%d", &slot);
+
+            if (slot >= 1 && slot <= BROJ_LIKOVA) {
+                printf("Unesite novo ime: ");
+                scanf("%s", novo_ime);
+                getchar();
+
+                promjeni_ime(slot - 1, novo_ime);
+            }
+            else {
+                printf("\nNeispravan broj slota.\n");
+            }
             break;
         case IZLAZ:
             logo();
