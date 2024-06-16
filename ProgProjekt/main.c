@@ -105,7 +105,7 @@ int main() {
 
             if (slot >= 1 && slot <= BROJ_LIKOVA) {
                 printf("Unesite novo ime: ");
-                scanf("%s", novo_ime);
+                scanf("%24s", novo_ime);
                 getchar();
 
                 promjeni_ime(slot - 1, novo_ime);

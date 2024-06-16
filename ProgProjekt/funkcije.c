@@ -343,7 +343,7 @@ void pretrazi_slot_og(int slot) {
 
     fclose(file);
 
-    printf("\n-------------------\n*** Slot %d ***\n", slot + 1);
+    printf("\n--------------------\n*****  Slot %d  *****\n", slot + 1);
     printf("Ime: %s\n", temp.ime);
     printf("Level: %d\n", temp.level);
     printf("Zdravlje: %d\n", temp.zdravlje);
@@ -419,7 +419,7 @@ void sortiranje_likova() {
 
     sortiraj_likove(likovi, BROJ_LIKOVA);
 
-    printf("\n-------------------\n*** Likovi sortirani po levelu ***\n");
+    printf("\n----------------------------------\n*** Likovi sortirani po levelu ***\n");
     for (int i = 0; i < BROJ_LIKOVA; i++) {
         if (likovi[i].level > 0) {
             printf("Level: %d, Ime: %s\n", likovi[i].level, likovi[i].ime);
