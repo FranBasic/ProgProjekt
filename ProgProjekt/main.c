@@ -75,7 +75,6 @@ int main() {
             printf("Unesite broj slota ( 1, 2 ili 3 ): ");
             scanf("%d", &slot);
             while (getchar() != '\n');
-
             if (slot >= 1 && slot <= BROJ_LIKOVA) {
                 izbrisi_lika(slot - 1);
             }
@@ -93,11 +92,26 @@ int main() {
             napravi_novog_lika(&igrac);
             break;
         case PRETRAZI_SLOT:
-            printf("Unesite broj slota ( 1, 2 ili 3 ): ");
-            scanf("%d", &slot);
+            printf("Unesite ime lika za pretragu: ");
+            scanf("%24s", novo_ime);
+            getchar();
 
-            while (getchar() != '\n');
-            pretrazi_slot_og(slot - 1);
+            Lik likovi[BROJ_LIKOVA];
+            int broj_likova = ucitaj_sve_likove(likovi);
+
+            qsort(likovi, broj_likova, sizeof(Lik), usporedi_imena);
+
+            Lik* trazeni_lik = pretrazi_lika(likovi, broj_likova, novo_ime);
+            if (trazeni_lik != NULL) {
+                printf("\nTrazeni lik: %s\nLevel: %d\nZdravlje: %d\nSnaga: %d\nBodovi: %d\n", trazeni_lik->ime, trazeni_lik->level, trazeni_lik->zdravlje, trazeni_lik->snaga, trazeni_lik->bodovi);
+            }
+            else {
+                printf("\nLik nije pronaden.\n");
+            }
+
+            for (int i = 0; i < BROJ_LIKOVA; i++) {
+                free(likovi[i].ime);
+            }
             break;
         case PREIMENUJ_LIKA:
             printf("Unesite broj slota (1, 2 ili 3): ");

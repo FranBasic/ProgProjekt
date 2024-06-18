@@ -466,7 +466,33 @@ int usporedi_levele(const void* a, const void* b) {
     return (lik2->level - lik1->level);
 }
 
+int ucitaj_sve_likove(Lik* likovi) {
+    for (int i = 0; i < BROJ_LIKOVA; i++) {
+        likovi[i].ime = (char*)calloc(IME_MAX, sizeof(char));
+        if (likovi[i].ime == NULL) {
+            printf("Greska memorije - ucitavanje svih likova.\n");
+            return -1;
+        }
+        ucitaj_lika(&likovi[i], i);
+    }
+    return BROJ_LIKOVA;
+}
+
+int usporedi_imena(const void* a, const void* b) {
+    const Lik* likA = (const Lik*)a;
+    const Lik* likB = (const Lik*)b;
+    return strcmp(likA->ime, likB->ime);
+}
+
+Lik* pretrazi_lika(Lik* likovi, int broj_likova, const char* ime) {
+    Lik trazeni;
+    trazeni.ime = (char*)ime;
+    return (Lik*)bsearch(&trazeni, likovi, broj_likova, sizeof(Lik), usporedi_imena);
+}
+
 void logo() {
+    int jedan = 1;
+
     blue
     printf("                         ########                      \n");
     printf("                      ####  ||  ####                   \n");
@@ -497,5 +523,5 @@ void logo() {
     printf("                ####        ||       ####              \n");
     printf("                    ###     ||    ###                  \n");
     printf("                       ###########                     \n"); reset
-    printf("      Fran Basic          "); blue printf("#####"); reset printf("            SR-1        \n");
+    printf("      Fran Basic          "); blue printf("#####"); reset printf("            SR-%d        \n", jedan);
 }

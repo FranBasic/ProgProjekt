@@ -13,7 +13,7 @@
 #define blue printf("\033[0;34m");
 #define reset printf("\033[0m");
 
-//static enum Izbor izbor;
+extern int jedan;
 
 typedef struct {
     char* ime;
@@ -71,5 +71,8 @@ void sortiranje_likova();
 int usporedi_levele(const void* a, const void* b);
 void logo();
 
-#endif
+int usporedi_imena(const void*, const void* b);
+Lik* pretrazi_lika(Lik* likovi, int broj_likova, const char* ime);
+int ucitaj_sve_likove(Lik* likovi);
 
+#endif
