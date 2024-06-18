@@ -136,6 +136,7 @@ int main() {
             break;
         }
         system("pause");
+
     } while (izbor != IZLAZ); 
 
     free(igrac.ime);
